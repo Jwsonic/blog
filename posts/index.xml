@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Posts on John Palgut&#39;s Blog</title>
+    <link>https://jwsonic.github.io/blog/posts/</link>
+    <description>Recent content in Posts on John Palgut&#39;s Blog</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <copyright>John Palgut — content licensed CC BY 4.0</copyright>
+    <lastBuildDate>Thu, 27 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://jwsonic.github.io/blog/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>The State of AI Engineering, August 2026</title>
+      <link>https://jwsonic.github.io/blog/posts/ai-engineering-patterns/</link>
+      <pubDate>Thu, 27 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://jwsonic.github.io/blog/posts/ai-engineering-patterns/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;A developer vibe-coding a side project a dozen people will ever run, and a team keeping a ten-year-old enterprise system alive for another quarter, share almost no constraints worth naming, and most of the advice in circulation is really one of those two people telling the other how to live.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#osmani-constraints&#34;&gt;Addy Osmani&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;The AI development space changes so quickly it&amp;rsquo;s hard to tell what&amp;rsquo;s real and what&amp;rsquo;s hype. Further complicating things, an approach can be valid for a lot of other folks&amp;rsquo; day to day, but not mine. It seems I regularly see a new project with 10K+ stars and say to myself, &amp;ldquo;Why would I ever need that?&amp;rdquo; The impetus for this post is my own desire to have some clarity on what seems to be working and when to apply it.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

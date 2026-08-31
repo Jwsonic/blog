@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>The State of AI Engineering, August 2026 | John Palgut&#39;s Blog</title>
+<meta name="keywords" content="blog, ai-engineering">
+<meta name="description" content="
+A developer vibe-coding a side project a dozen people will ever run, and a team keeping a ten-year-old enterprise system alive for another quarter, share almost no constraints worth naming, and most of the advice in circulation is really one of those two people telling the other how to live.
+
+Addy Osmani
+
+
+The AI development space changes so quickly it&rsquo;s hard to tell what&rsquo;s real and what&rsquo;s hype. Further complicating things, an approach can be valid for a lot of other folks&rsquo; day to day, but not mine. It seems I regularly see a new project with 10K&#43; stars and say to myself, &ldquo;Why would I ever need that?&rdquo; The impetus for this post is my own desire to have some clarity on what seems to be working and when to apply it.">
+<meta name="author" content="">
+<link rel="canonical" href="https://jwsonic.github.io/blog/posts/ai-engineering-patterns/">
+<link crossorigin="anonymous" href="/blog/assets/css/stylesheet.cd9298b33628769aa1bc1acebbbfd7aa11ce81dfe03484d479e1907760249a1d.css" integrity="sha256-zZKYszYodpqhvBrOu7/XqhHOgd/gNITUeeGQd2Akmh0=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://jwsonic.github.io/blog/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://jwsonic.github.io/blog/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://jwsonic.github.io/blog/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://jwsonic.github.io/blog/apple-touch-icon.png">
+<link rel="mask-icon" href="https://jwsonic.github.io/blog/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://jwsonic.github.io/blog/posts/ai-engineering-patterns/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script><meta property="og:url" content="https://jwsonic.github.io/blog/posts/ai-engineering-patterns/">
+  <meta property="og:site_name" content="John Palgut&#39;s Blog">
+  <meta property="og:title" content="The State of AI Engineering, August 2026">
+  <meta property="og:description" content="A developer vibe-coding a side project a dozen people will ever run, and a team keeping a ten-year-old enterprise system alive for another quarter, share almost no constraints worth naming, and most of the advice in circulation is really one of those two people telling the other how to live.
+Addy Osmani The AI development space changes so quickly it’s hard to tell what’s real and what’s hype. Further complicating things, an approach can be valid for a lot of other folks’ day to day, but not mine. It seems I regularly see a new project with 10K&#43; stars and say to myself, “Why would I ever need that?” The impetus for this post is my own desire to have some clarity on what seems to be working and when to apply it.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-08-27T00:00:00+00:00">
+    <meta property="article:modified_time" content="2026-08-27T00:00:00+00:00">
+    <meta property="article:tag" content="Blog">
+    <meta property="article:tag" content="Ai-Engineering">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="The State of AI Engineering, August 2026">
+  <meta name="twitter:description" content="A developer vibe-coding a side project a dozen people will ever run, and a team keeping a ten-year-old enterprise system alive for another quarter, share almost no constraints worth naming, and most of the advice in circulation is really one of those two people telling the other how to live.
+Addy Osmani The AI development space changes so quickly it’s hard to tell what’s real and what’s hype. Further complicating things, an approach can be valid for a lot of other folks’ day to day, but not mine. It seems I regularly see a new project with 10K&#43; stars and say to myself, “Why would I ever need that?” The impetus for this post is my own desire to have some clarity on what seems to be working and when to apply it.">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://jwsonic.github.io/blog/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "The State of AI Engineering, August 2026",
+      "item": "https://jwsonic.github.io/blog/posts/ai-engineering-patterns/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "The State of AI Engineering, August 2026",
+  "name": "The State of AI Engineering, August 2026",
+  "description": " A developer vibe-coding a side project a dozen people will ever run, and a team keeping a ten-year-old enterprise system alive for another quarter, share almost no constraints worth naming, and most of the advice in circulation is really one of those two people telling the other how to live.\nAddy Osmani The AI development space changes so quickly it\u0026rsquo;s hard to tell what\u0026rsquo;s real and what\u0026rsquo;s hype. Further complicating things, an approach can be valid for a lot of other folks\u0026rsquo; day to day, but not mine. It seems I regularly see a new project with 10K+ stars and say to myself, \u0026ldquo;Why would I ever need that?\u0026rdquo; The impetus for this post is my own desire to have some clarity on what seems to be working and when to apply it.\n",
+  "keywords": [
+    "blog", "ai-engineering"
+  ],
+  "articleBody": " A developer vibe-coding a side project a dozen people will ever run, and a team keeping a ten-year-old enterprise system alive for another quarter, share almost no constraints worth naming, and most of the advice in circulation is really one of those two people telling the other how to live.\nAddy Osmani The AI development space changes so quickly it’s hard to tell what’s real and what’s hype. Further complicating things, an approach can be valid for a lot of other folks’ day to day, but not mine. It seems I regularly see a new project with 10K+ stars and say to myself, “Why would I ever need that?” The impetus for this post is my own desire to have some clarity on what seems to be working and when to apply it.\nThis post surveys current thoughts and patterns in AI engineering as of August 2026. It uses a number of videos from the AI Engineer World’s Fair conference in San Francisco, a conference I’ve found to be a good proxy for the current state of the conversation. It also includes a number of AI engineering blog posts from various companies, as well as posts from practitioners that I’ve found high signal.\nMy goal is to convey accurate information about the current landscape and to provide references of resources for others to learn from. I voice some personal opinions in order to spark discussion, but try to identify them as such. Let’s dive in.\nThe Agentic Era “we haven’t even coalesced on a definition of what an agent is, even though we’re well into the agentic era.”\nJustin Schroeder, StandardAgents (2:12) Across everything I’ve watched and read, I don’t know that I’ve seen even two people agree on the same definition of an Agent.\nA few years ago most definitions of an Agent were roughly: LLM + memory + tools + planning + action. However, more recent definitions move the deterministic layer (tools, memory, etc) under the term harness. The definition of an Agent then becomes a harness plus the LLM it drives. Popular harnesses today include Claude Code, Codex, OpenCode, etc.\nSplitting the harness from the LLM gives us a catch-all term to discuss that deterministic layer separate from the LLM. Folks using the same harness can author static configurations, allowing for version controlled experimentation or sharing.\nAt Scale A major benefit of the Agent abstraction can be realized once you adopt the constraint of “one task per Agent”. Schroeder calls these domain specific Agents. Domain specific Agents have been shown to have better overall performance on their task, as well as a reduced cost.\nIn addition to improved cost and performance, this small change allows us to think of Agents as functions that can be tested, parallelized, looped, and scaled. Techniques that software engineers have spent decades utilizing and building infrastructure around.\nTopologies for Agent orchestration seem varied, often customized for the organization or task at hand. A few companies have seized on this trend, such as Vercel or Anthropic, by creating Agent management SDKs, turning Agents into something you can install.\nOthers opt for bespoke in-house solutions. Cloudflare fans PR reviews to a panel of specialist Agents with a coordinating Agent managing them. DoorDash recently set up a cloud Agent platform, providing their developers with tools like sandboxes, an MCP gateway, and playbooks, letting teams run their own Agents.\nContext is Everything “the LLM is a new kind of a computer… it’s kind of like the CPU equivalent. The context windows are kind of like the memory, and then the LLM is orchestrating memory and compute for problem solving.”\nAndrej Karpathy (10:15) An area of much discussion across all of these resources is the idea of curating the tokens you’re sending to the LLM to be highly relevant to the task and as few as possible. This process used to be called prompting, but today broadly falls under the term context engineering or context management. The rationale for context engineering can be seen across a few different categories.\nContext Rot Context Rot is the first of our categories, which was first introduced in a technical report by Chroma Context Rot: How Increasing Input Tokens Impacts LLM Performance. The basic idea behind Context Rot is that more tokens measurably “distract” the LLM, as its attention is spread thinner across the increased tokens.\nThis means even though a model may support a context window of a million tokens, you likely don’t want to be using even close to all of them.\n“If you’re just getting started with AI, try to keep it around 100,000 tokens. For [a] larger million[-token] context window, we probably revise this up to like 200,000 tokens - but I’ve regularly tried to keep it under 60[k] for the hardest problems… One of the telltale signs that you’re in the dumb zone is… you’re 200,000 tokens in and the model’s finished some work and it’s trying to get the test to pass and it’s like not [passing].”\nDex Horthy, HumanLayer (28:36) This quote caught me off guard the first time I heard it, but the more I thought about it, the more it made sense. While long chat sessions can be good, we’ve all had those conversations where it’s going great and then suddenly the LLM is forgetting things or hallucinating. I’ve actually added a warning to my Claude Code config that changes the context window to orange when I’ve reached 100k tokens, as a reminder to reset.\nAnother technique I’ve found useful for keeping chat sessions focused is heavy utilization of Claude Code’s subagents and dynamic workflows. I keep the main chat focused on the overall goal, i.e., “plan feature X”, and have it spawn agents for anything that might distract it from that task. This can include things like reading code, exploring data in Snowflake, checking latency in Datadog, or even web searches. The subagents come back with the information we need to make a decision, and the main chat stays on track.\nCost The second category is the cost savings that come with using fewer tokens. Being deliberate about what gets sent to the model means less input cost as well as reduced back-and-forth cost (output).\nPerhaps surprisingly, Rajkumar Sakthivel (Tesco) found that for their coding tasks ~90% of the tokens are input (big codebase/context in, small diff out). Despite the fact that output tokens are priced 4-8x higher than input tokens, reducing input tokens worked out to roughly ~61% of their dollar bill.\nWhere your tokens actually go (Rajkumar Sakthivel, Tesco, 2:57)\nSolutions In Practice Skills A popular solution to context management is skills. Skills have exploded onto the AI development scene and were the headline of several talks at the conference.\nSkills are a markdown file spec created by Anthropic, that gives the LLM instructions on how to complete a task. Skills are an improvement over normal markdown files due to their utilization of progressive disclosure. Skills have a yaml metadata “frontmatter” that harnesses read, rather than the entire skill body. This metadata is then used to selectively load the skill content at runtime when the Agent deems it relevant.\n“If you do something ≥ once a week, make it a skill… Think of skills as workflows written in markdown.”\nEugene Yan Anecdotally, skills have been incredibly valuable to the ML search team as day-to-day workflows. This includes things such as PR reviewing, data exploration, working with Datadog, and even Optimizely experiment generation.\nHowever, skills aren’t a silver bullet. Philipp Schmid of Google DeepMind found that while human-generated skills improved model performance on task, AI-generated skills performed worse on tasks than a model with no skills at all.\nPerhaps dating myself, I see skills as the AI generation’s jQuery. Skills are an extremely useful abstraction for the problems we’re having now. However, I suspect that in five or ten years we’ll have different abstractions that can better model the nuances of working with Agents.\nCompression Another way to keep a lean context window is to utilize compression techniques to send the same information with fewer tokens. Headroom does this via a proxy server, inspecting your outbound payload for code and compressing it. In addition to compression, Tesco passes only function names and descriptions rather than the entire thing.\n“Instead of sending whole files, the AI search[es] and index[es]. It gets back only [the] small piece of code it actually needs.”\nRajkumar Sakthivel, Tesco (3:25) Toon takes a different approach to compression, opting to replace JSON with a structured data format explicitly designed to use fewer tokens. Projects like AXI take this a step further, creating a set of rules for building CLI tools and MCP servers in a way that measurably uses fewer tokens.\nLong Term Memory “every company on this earth is about to need a brain - the memory layer that means you never have to re-ask what you knew.”\nGarry Tan, Y Combinator (17:22) Since LLM sessions are stateless, important data must be persisted in some form. While sometimes a pain, this has the added benefit of allowing us to pick and choose only the most important information for the context window.\nI’ve seen this show up in a few places as the “Company Brain”. Y Combinator believes all companies need to create a company brain. Cloudflare built a company brain when they realized that institutional knowledge “became harder to recover when people moved between teams.” Eugene Yan puts it simply: “Connect models to your organization’s context”.\nThe simplest way to do this is via a folder on your disk, some sort of Markdown vault (Obsidian, Tolaria, etc.), or per-project markdown documentation. However, the markdown-as-memory approach comes with its own pitfalls. Cloudflare notes that markdown memory “rots incredibly fast” and requires constant updates as things change. Personally I’ve had Claude recite “facts” to me on a number of occasions that can be traced to an outdated markdown file or code comment somewhere.\nAnother markdown pitfall is that it’s easy to load the whole document into context when only a small subset is required. Common ways to avoid this are to have the Agent use grep, tail, head or jq to parse relevant data from files. ast-grep is useful for codebases, allowing Agents to seek out specific programming language patterns. Cloudflare takes a different approach for the Codex brain, parsing relevant statements out and loading only those into Codex.\nNon-markdown long term memory options are also gaining in popularity. These include projects such as Letta, Mem0, or Zep. The materials I reviewed for this post don’t really cover these. At a glance most seem to be abstractions on top of databases and vector embeddings that allow an Agent to access information semantically.\nLoops “My job is to write loops.”\nBoris Cherny, creator of Claude Code (Anthropic) I’m almost certain everyone reading this knows what a loop is. It’s so ingrained into our day to day that we overlook that almost everything can be reduced to a loop. The AI development space has been rediscovering loops lately.\nI see AI Agent loops as largely falling under two categories: what I call the Agent loop and the Improvement loop.\nAgent Loop The Agent loop is about having a single Agent iterate until it has achieved a given task. This doesn’t necessarily have to be writing code. Uber Eats uses multi-modal Agent loops to augment product images.\nKyle Mistele of HumanLayer maps the Agent loop onto classical systems design control loop:\nAgentic control loops (Kyle Mistele, HumanLayer)\nWe give the Agent loop our desired state, which is then compared to the current state, generating a list of changes. The controller, usually heuristics or perhaps the Agent itself, selects a change to make. The Agent executes the change and commits it as the “new state”. The changes are run through a set of sensors (validators) and any violations are surfaced to the controller. A new Agent, with a fresh context window, picks up the next task and the loop repeats until the desired state is reached.\nGiving an Agent loop a set of well-defined tasks and letting it run through them is an effective way to iterate towards a desired goal. As we saw in the previous section, a fresh context window helps keep the Agent task focused. However, if you don’t give the Agent some form of deterministic guardrails, it can quickly spiral out of control.\nThe Great Loops Debate has panelists argue points from opposite ends of the autonomy curve. Geoff Huntley (creator of the Ralph loop) and Ian Livingstone (Keycard) argue for the YOLO version of the Agent loop (Ralph Wiggum, /goal) where the Agent decides when the loop is completed. Dex Horthy (HumanLayer) and Greg Pstrucha (Sentry) argue that a human needs to decide when the loop is complete, citing non-deterministic LLM behavior. It’s worth noting that both sides agree that deterministic validation is important in agentic loops.\n“I heavily exploit pre-commit hooks, folks… and I engineer in that back pressure by analyzing the work that is done.”\nGeoff Huntley (30:47) Personally, I think both types of loops have their place. Goal loops can be incredibly valuable for vibe coding one-off scripts or standing up a greenfield project. However, if I have to maintain critical systems or ship code at scale, I think I want a human in the loop.\nImprovement Loop The Improvement loop operates at a meta-level, across multiple iterations of an Agent. The output of the Agent loop is assessed on task performance and future iterations of the Agent loop are modified with the goal of improved performance on the task.\nA real-world example of the Improvement loop is Uber Eats’ Agent tuner:\nHow Uber tunes an Agent (Soumya Gupta \u0026 Jai Chopra, Uber)\nTheir Agent is fed a base prompt and human-labeled data. It performs a task, in this case choosing what images a user sees, and the output is scored against unseen samples. A different Agent suggests changes to the prompt for the initial Agent, and the loop starts over. This loop itself is part of a larger pipeline run on real-time user data, allowing Uber to ship improved Agent loops in near real-time.\nAnnabell Schäfer shows how Langfuse used an Improvement loop to have a large model (Opus 4.8) improve a smaller model’s (GPT-5.4 nano) performance on a classification task. The large model’s prompt changes are seeded via human domain knowledge.\nLilian Weng has an excellent survey of current research into Agent harness Improvement loops. Some papers continue refinement via prompt and context adjustments. Others move to an even higher level, experimenting with loops that modify harness code or model weights.\nTaming the Stochastic Core “People worry about hallucinations, but that’s the feature… We hallucinate in a way. We imagine things that may not exist, and then we turn them into reality. And that’s what large language models do.”\nFrank Coyle, UC Berkeley (5:05) Code is deterministic. Given the same inputs you’ll get the same outputs. This is something software developers rely on every day: Does this code compile? Do my tests pass? The LLM core of an Agent is non-deterministic, making it difficult to guarantee it will do what you expect. As we’ll see, the AI development community utilizes both deterministic and non-deterministic methods together to keep Agents pointed in the right direction.\nVerification should be multilayered (Tariq Shaukat, Sonar, 12:06)\nTests, Linters, and Compilers “I think of verification as a ladder. The bottom is cheap and deterministic; the top is expensive and requires judgement.”\nEugene Yan Our existing deterministic verifiers allow us to perform a reliable “this must pass” check on LLM output. Since by definition deterministic checks are repeatable and reliable, any check that can be made deterministic in an Agent loop likely should be.\nAs we saw in the agent loop diagram above, the same compilers, tests, and linters that we use day to day are part of the Agent loop definition. Geoff Huntley recommends utilizing git pre-commit hooks as a window to catch violations, and echo “prompts” back to the Agent, letting it know where the boundary is.\nOntologies An ontology is a deterministic rules layer that sits on top of a fact-based data graph. These rules define valid data types and relationships, giving a deeper semantic meaning to the data. Take this example of a teacher-student relationship:\n“So if I say teaches has a domain of teacher, that means if I say ‘Bob teaches Scooter’ in my text, I can infer that Bob is a teacher. And if I say ‘all teachers are persons,’ then this statement lets me know, if I say ‘Bob teaches Scooter,’ now I know Bob is a person, Bob is a teacher. What about Scooter? If I say teaches has a range of student, that means the right side of the verb, then Scooter is a student. And now I have this extra information into my system.”\nFrank Coyle, UC Berkeley (10:09) An Agent can construct a structured statement that is then deterministically fact-checked by the ontology. Coyle discusses two ontology specifications which were designed for the early semantic web over 20 years ago. RDFS defines a language for schema and vocabulary. OWL builds on top of RDFS adding richer ontology axioms.\nEmil Eifrem of Neo4j posits that every business needs an ontology substrate with three pillars:\nOntology-based semantic layer, three pillars (Emil Eifrem, Neo4j, 6:12)\nThis ontology substrate prevents teams from needing to re-discover their information sources every time they build an Agent. It’s the data version of keeping your code DRY.\nBoth ontology talks outline two methods of building ontologies. The top-down approach is where domain experts define entities and their relationships. The bottom-up approach takes existing production execution traces and codifies them into ontologies.\nEvals “Code is provable, but when you start dealing with large code bases, software is not. It’s still very complex. It is still very messy.”\nTariq Shaukat, Sonar (7:45) Evals are a set of tests you run on Agent outputs to measure how well a given Agent configuration is doing on a task over time. They play a critical part in the Improvement loop. Low initial evals are not necessarily bad. Rather, they highlight areas for improvement. With proper tuning an Agent can improve its eval pass rate over time.\nUber considers human labels the source of truth for use in their evals. They give human labelers an objective guideline for labeling data that is usually in a simple form (yes, no, unsure).\nWhen building evals it’s important to use real-world data. This can include obvious examples like user signals, but can also include less obvious sources such as logs or system traces. Uber logs as much data as they can, allowing them to map production data to user segments where the Agent can improve.\nA pitfall to watch out for with evals comes in the form of reward hacking, where the Agent learns how to game the metric rather than complete the task. This can even include scenarios such as Agents looking up prior runs to cheat (Schmid, 18:48). Lilian Weng’s article advises combatting reward hacking with a gating secondary “held-out” eval set that the Agent cannot see. Uber does something similar with a secondary recall guardrail metric, preventing the Agent from regressing in other areas to pass a specific eval.\nModels Watching Models One of the more popular forms of non-deterministic validation is using one LLM to grade the output of a different LLM against a given criterion. This process is often referred to as LLM as a Judge. Teams often reach for this form of verification when a grading task is complex or doesn’t necessarily have a verifiable correct answer.\nLLM as a Judge shouldn’t be used lightly, however. Its non-deterministic nature means that a judge could pass an input one run and fail it the next. Cloudflare builds resilience into their judge architecture by having a panel of specialized judge Agents that feed verdicts to a coordinating Agent responsible for the final judgment. Judge model architectures also have the hidden overhead of needing an Improvement loop, evals, and data to ensure alignment to the task.\nReferences Talks The Future Is Domain-Specific Agents Justin Schroeder, StandardAgents · AI Engineer World’s Fair 2026 · https://www.youtube.com/watch?v=spNAUEgq_A8\nWe’re well into the “agentic era” without even agreeing on what an agent is (2:12) The Great Loops Debate (panel) Dex Horthy (HumanLayer), Geoff Huntley, Ian Livingstone (KeyCard), Greg Pstrucha (Sentry) · moderated by Allie Howe (Insecure Agents) · AI Engineer World’s Fair 2026 · https://youtu.be/c35YoMdnI78\nKeep context small: the token budgets that keep you out of the “dumb zone” (~28:36) Engineering back-pressure into the loop with pre-commit hooks that echo the boundary back to the agent (30:47) We Cut 94% of AI Coding Tokens With a Local Code Index Rajkumar Sakthivel, Tesco · AI Engineer World’s Fair 2026 · https://www.youtube.com/watch?v=dRmWYHuIJxM\nWhere coding-agent tokens actually go (~90% input), and how a local code index slashed them (2:49) On the local code index: searching and indexing so the Agent gets back only the slice of code it needs, not whole files (3:25) Don’t Ship Skills Without Evals Philipp Schmid, Google DeepMind · AI Engineer World’s Fair 2026 · https://www.youtube.com/watch?v=0vphxNt4wyk\nWhy you shouldn’t ship skills without evals, including agents that learn to game the metric (18:48) Every company should have a Brain Garry Tan, Y Combinator · AI Engineer World’s Fair 2026 · https://www.youtube.com/watch?v=eBUyTS7SzV4\nWhy every company will need a “brain”: a persistent memory layer so you never re-ask what you already knew (17:22) Building Closed-Loop Evals for a Multimodal Agent at Scale Soumya Gupta \u0026 Jai Chopra, Uber · AI Engineer World’s Fair 2026 · https://www.youtube.com/watch?v=31GUkCBD-Uc\nA closed-loop eval system that diagnoses failing agents and auto-tunes them from production feedback (13:07) Loop Engineering from First Principles Kyle Mistele, HumanLayer · AI Engineer World’s Fair 2026 · https://www.youtube.com/watch?v=xIt_mTQp6mY\nThe agent loop drawn as a classical control loop: desired state, controller, actuator, sensor, and violations fed back (4:36) Stop Burning Tokens: Why self-improvement needs domain expertise first Annabell Schäfer, Langfuse · AI Engineer World’s Fair 2026 · https://www.youtube.com/watch?v=eAXxdtNlK04\nUsing a large model to improve a small model’s classifier, seeded with human domain knowledge (5:08) Why Agentic Systems Need Ontologies Frank Coyle, UC Berkeley · AI Engineer World’s Fair 2026 · https://www.youtube.com/watch?v=Sir59K8ZDPU\nReframing hallucination as the feature: imagining things that don’t exist yet, then turning them into reality (5:05) How an ontology’s domain and range rules let you infer new facts (the Bob/Scooter teacher-student example) (10:09) Thinner Agents on a Smarter Substrate: The Ontology-based Semantic Layer Emil Eifrem, Neo4j · AI Engineer World’s Fair 2026 · https://www.youtube.com/watch?v=VGN22pPpb-8\nWhy every business needs a shared ontology substrate (three pillars) so agents stop rediscovering the same data sources (8:03) The full three-pillars semantic-layer slide: a business-facing ontology, a technical ontology, and execution traces (6:12) In the Land of AI Agents, the Verifiers Are King Tariq Shaukat, Sonar · AI Engineer World’s Fair 2026 · https://www.youtube.com/watch?v=VrpEyglYgeU\nWhy code is provable but large software systems are not, and what that means for verifying agents (7:45) Harness Engineering is not Enough: Why Software Factories Fail Dex Horthy, HumanLayer · AI Engineer World’s Fair 2026 · https://www.youtube.com/watch?v=Ib5GBkD555M\nOn why the human review-and-test step is still the bottleneck even as the build step gets faster (6:16) I Run a Fleet of AI Agents Across Three Machines. Here’s What Broke. Kyle Jaejun Lee, KRAFTON · AI Engineer World’s Fair 2026 · https://www.youtube.com/watch?v=4kYl2_mqmnQ\nHard-won lessons running a fleet of agents across three machines, and what broke (1:22) The Unreasonable Effectiveness of Separating the Task from the Model Maxime Rivest \u0026 Isaac Miller · AI Engineer World’s Fair 2026 · https://www.youtube.com/watch?v=GgLQ02aO-hs\nFull Workshop: Setting Yourself Up for Success Jason Liu, OpenAI Codex · AI Engineer World’s Fair 2026 · https://www.youtube.com/watch?v=il1c1a2FufU\nActive Graph Agent Runtime (BabyAGI 4) Yohei Nakajima, Untapped Capital · AI Engineer World’s Fair 2026 · https://www.youtube.com/watch?v=khVX_BUnEwU\nWritten Addy Osmani Vibe-coding “no shared constraints” quote (Addy Osmani, @addyosmani, 2026-06-15) · tweet: https://x.com/addyosmani/status/2066595308629594363 Cloudflare Shared by Nate Strandberg in #guild-ai on 2026-08-06 (thread).\nHow Cloudflare enforces engineering standards using AI - Timo Reimann · https://blog.cloudflare.com/engineering-standards-enforcement/ “Institutional knowledge became harder to recover when people moved between teams, and guidance that was not consistently surfaced or enforced led to drift between projects.” Takeaways Graph ontology based on specs Rule based brain coding pillar Non deterministic from what I can tell Orchestrating AI Code Review at scale - Ryan Skidmore · https://blog.cloudflare.com/ai-code-review/ DoorDash Engineering Delegating Engineering Work to Cloud-Based Agents (Flux, DoorDash Engineering / @AIatDoorDash, 2026-08-11) · https://x.com/AIatDoorDash/status/2087284229751394705 In-house cloud agent platform: Firecracker microVM sandboxes, an MCP “Agent Gateway” with scoped per-playbook permissions, reusable YAML “playbooks” (mixing agentic and deterministic steps), and multi-surface invocation (Slack, GitHub, cron, CLI). DoorDash-reported scale: 130k automated engineering tasks/month, 25k+ code reviews/week. Thesis: writing code is mostly solved; the value is the harness/infrastructure around the agent. Started narrow with code review to earn trust. Andrej Karpathy Software Is Changing (Again) (YC AI Startup School, 2025-06-17) · https://www.youtube.com/watch?v=LCEmiRjPEtQ “the LLM is a new kind of a computer… it’s kind of like the CPU equivalent. The context windows are kind of like the memory, and then the LLM is orchestrating memory and compute for problem solving.” Iron Man suit / human-in-the-loop analogy starts at 27:50 → https://www.youtube.com/watch?v=LCEmiRjPEtQ\u0026t=1670s Chroma Context Rot: How Increasing Input Tokens Impacts LLM Performance - Kelly Hong, Anton Troynikov, Jeff Huber (Chroma Technical Report, 2025-07-14) · https://research.trychroma.com/context-rot Eugene Yan How to Work and Compound with AI (2026-05) · https://eugeneyan.com/writing/working-with-ai/ “If you do something ≥ once a week, make it a skill… Think of skills as workflows written in markdown.” “I think of verification as a ladder. The bottom is cheap and deterministic; the top is expensive and requires judgement.” Boris Cherny “My job is to write loops” (Claude Code \u0026 the Future of Engineering, Acquired Unplugged / WorkOS, ~June 2026) · clip: https://x.com/Av1dlive/status/2064321381953675599 “My job is to write loops.” Lilian Weng Harness Engineering for Self-Improvement (Lil’Log, 2026-07-04) · https://lilianweng.github.io/posts/2026-07-04-harness/ Kun Chen firstmate · https://github.com/kunchenguid/firstmate no-mistakes · https://github.com/kunchenguid/no-mistakes YouTube · https://www.youtube.com/@kunchenguid L8 Principal’s Agentic Engineering Workflow (walkthrough) · https://www.youtube.com/watch?v=iQyg-KypKAA Steve Yegge / Gas Town Welcome to Gas Town (blog) · https://steve-yegge.medium.com/welcome-to-gas-town-4f25ee16dd04 Gas City (repo, gastownhall/gascity) · https://github.com/gastownhall/gascity Artificial Analysis Artificial Analysis - independent, continuously-updated LLM model \u0026 provider benchmarks (Intelligence Index, price per token, speed/throughput, context window, open weights) · https://artificialanalysis.ai Tools \u0026 Specs AI SDK (Vercel) - TypeScript toolkit for building AI apps and agents across model providers · https://ai-sdk.dev/docs/introduction Anthropic Claude Agent SDK - Anthropic’s SDK for building agents on the Claude Code harness (built-in tools, agent loop, context management, MCP, subagents) · https://code.claude.com/docs/en/agent-sdk Claude Code subagents · https://code.claude.com/docs/en/sub-agents Claude Code dynamic workflows · https://code.claude.com/docs/en/workflows headroom · https://github.com/headroomlabs-ai/headroom · via Randy Brown Token-Oriented Object Notation · https://toonformat.dev/ axi · https://axi.md/ · repo: https://github.com/kunchenguid/axi ast-grep · https://ast-grep.github.io/ RDF Schema (RDFS) · https://www.w3.org/TR/rdf-schema/ Web Ontology Language (OWL 2) · https://www.w3.org/TR/owl2-overview/ ",
+  "wordCount" : "4470",
+  "inLanguage": "en",
+  "datePublished": "2026-08-27T00:00:00Z",
+  "dateModified": "2026-08-27T00:00:00Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jwsonic.github.io/blog/posts/ai-engineering-patterns/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "John Palgut's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jwsonic.github.io/blog/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="header-nav">
+        <div class="logo">
+            <a href="https://jwsonic.github.io/blog/" accesskey="h" title="John Palgut&#39;s Blog (Alt + H)">John Palgut&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" class="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg class="moon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg class="sun" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu" class="menu">
+            <li>
+                <a href="https://jwsonic.github.io/blog/posts/" title="Posts">
+                    <span>Posts</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://jwsonic.github.io/blog/tags/" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <nav class="breadcrumbs" role="navigation" aria-label="Breadcrumb">
+            <a href="/blog/">Home</a>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+            <a href="/blog/posts/">Posts</a>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right">
+        <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+</nav>
+    <h1 class="post-title entry-hint-parent">
+      The State of AI Engineering, August 2026
+    </h1>
+    <div class="post-meta">
+
+<span title='2026-08-27 00:00:00 +0000 UTC'>August 27, 2026</span>&nbsp;·&nbsp;<span>21 min</span>
+
+</div>
+  </header> <details class="toc" >
+    <summary accesskey="c" title="(Alt + C)">
+        <span class="title">Table of Contents</span>
+    </summary>
+
+    <div class="inner"><ul><ul>
+            <li>
+                <a href="#the-agentic-era" aria-label="The Agentic Era">The Agentic Era</a><ul>
+                    
+            <li>
+                <a href="#at-scale" aria-label="At Scale">At Scale</a></li></ul>
+            </li>
+            <li>
+                <a href="#context-is-everything" aria-label="Context is Everything">Context is Everything</a><ul>
+                    
+            <li>
+                <a href="#context-rot" aria-label="Context Rot">Context Rot</a></li>
+            <li>
+                <a href="#cost" aria-label="Cost">Cost</a></li>
+            <li>
+                <a href="#solutions-in-practice" aria-label="Solutions In Practice">Solutions In Practice</a><ul>
+                    
+            <li>
+                <a href="#skills" aria-label="Skills">Skills</a></li>
+            <li>
+                <a href="#compression" aria-label="Compression">Compression</a></li>
+            <li>
+                <a href="#long-term-memory" aria-label="Long Term Memory">Long Term Memory</a></li></ul>
+            </li></ul>
+            </li>
+            <li>
+                <a href="#loops" aria-label="Loops">Loops</a><ul>
+                    
+            <li>
+                <a href="#agent-loop" aria-label="Agent Loop">Agent Loop</a></li>
+            <li>
+                <a href="#improvement-loop" aria-label="Improvement Loop">Improvement Loop</a></li></ul>
+            </li>
+            <li>
+                <a href="#taming-the-stochastic-core" aria-label="Taming the Stochastic Core">Taming the Stochastic Core</a><ul>
+                    
+            <li>
+                <a href="#tests-linters-and-compilers" aria-label="Tests, Linters, and Compilers">Tests, Linters, and Compilers</a></li>
+            <li>
+                <a href="#ontologies" aria-label="Ontologies">Ontologies</a></li>
+            <li>
+                <a href="#evals" aria-label="Evals">Evals</a></li>
+            <li>
+                <a href="#models-watching-models" aria-label="Models Watching Models">Models Watching Models</a></li></ul>
+            </li></ul>
+                
+            <li>
+                <a href="#references" aria-label="References">References</a><ul>
+                    
+            <li>
+                <a href="#talks" aria-label="Talks">Talks</a><ul>
+                    
+            <li>
+                <a href="#the-future-is-domain-specific-agents" aria-label="The Future Is Domain-Specific Agents">The Future Is Domain-Specific Agents</a></li>
+            <li>
+                <a href="#the-great-loops-debate-panel" aria-label="The Great Loops Debate (panel)">The Great Loops Debate (panel)</a></li>
+            <li>
+                <a href="#we-cut-94-of-ai-coding-tokens-with-a-local-code-index" aria-label="We Cut 94% of AI Coding Tokens With a Local Code Index">We Cut 94% of AI Coding Tokens With a Local Code Index</a></li>
+            <li>
+                <a href="#dont-ship-skills-without-evals" aria-label="Don&rsquo;t Ship Skills Without Evals">Don&rsquo;t Ship Skills Without Evals</a></li>
+            <li>
+                <a href="#every-company-should-have-a-brain" aria-label="Every company should have a Brain">Every company should have a Brain</a></li>
+            <li>
+                <a href="#building-closed-loop-evals-for-a-multimodal-agent-at-scale" aria-label="Building Closed-Loop Evals for a Multimodal Agent at Scale">Building Closed-Loop Evals for a Multimodal Agent at Scale</a></li>
+            <li>
+                <a href="#loop-engineering-from-first-principles" aria-label="Loop Engineering from First Principles">Loop Engineering from First Principles</a></li>
+            <li>
+                <a href="#stop-burning-tokens-why-self-improvement-needs-domain-expertise-first" aria-label="Stop Burning Tokens: Why self-improvement needs domain expertise first">Stop Burning Tokens: Why self-improvement needs domain expertise first</a></li>
+            <li>
+                <a href="#why-agentic-systems-need-ontologies" aria-label="Why Agentic Systems Need Ontologies">Why Agentic Systems Need Ontologies</a></li>
+            <li>
+                <a href="#thinner-agents-on-a-smarter-substrate-the-ontology-based-semantic-layer" aria-label="Thinner Agents on a Smarter Substrate: The Ontology-based Semantic Layer">Thinner Agents on a Smarter Substrate: The Ontology-based Semantic Layer</a></li>
+            <li>
+                <a href="#in-the-land-of-ai-agents-the-verifiers-are-king" aria-label="In the Land of AI Agents, the Verifiers Are King">In the Land of AI Agents, the Verifiers Are King</a></li>
+            <li>
+                <a href="#harness-engineering-is-not-enough-why-software-factories-fail" aria-label="Harness Engineering is not Enough: Why Software Factories Fail">Harness Engineering is not Enough: Why Software Factories Fail</a></li>
+            <li>
+                <a href="#i-run-a-fleet-of-ai-agents-across-three-machines-heres-what-broke" aria-label="I Run a Fleet of AI Agents Across Three Machines. Here&rsquo;s What Broke.">I Run a Fleet of AI Agents Across Three Machines. Here&rsquo;s What Broke.</a></li>
+            <li>
+                <a href="#the-unreasonable-effectiveness-of-separating-the-task-from-the-model" aria-label="The Unreasonable Effectiveness of Separating the Task from the Model">The Unreasonable Effectiveness of Separating the Task from the Model</a></li>
+            <li>
+                <a href="#full-workshop-setting-yourself-up-for-success" aria-label="Full Workshop: Setting Yourself Up for Success">Full Workshop: Setting Yourself Up for Success</a></li>
+            <li>
+                <a href="#active-graph-agent-runtime-babyagi-4" aria-label="Active Graph Agent Runtime (BabyAGI 4)">Active Graph Agent Runtime (BabyAGI 4)</a></li></ul>
+            </li>
+            <li>
+                <a href="#written" aria-label="Written">Written</a><ul>
+                    
+            <li>
+                <a href="#addy-osmani" aria-label="Addy Osmani">Addy Osmani</a></li>
+            <li>
+                <a href="#cloudflare" aria-label="Cloudflare">Cloudflare</a></li>
+            <li>
+                <a href="#doordash-engineering" aria-label="DoorDash Engineering">DoorDash Engineering</a></li>
+            <li>
+                <a href="#andrej-karpathy" aria-label="Andrej Karpathy">Andrej Karpathy</a></li>
+            <li>
+                <a href="#chroma" aria-label="Chroma">Chroma</a></li>
+            <li>
+                <a href="#eugene-yan" aria-label="Eugene Yan">Eugene Yan</a></li>
+            <li>
+                <a href="#boris-cherny" aria-label="Boris Cherny">Boris Cherny</a></li>
+            <li>
+                <a href="#lilian-weng" aria-label="Lilian Weng">Lilian Weng</a></li>
+            <li>
+                <a href="#kun-chen" aria-label="Kun Chen">Kun Chen</a></li>
+            <li>
+                <a href="#steve-yegge--gas-town" aria-label="Steve Yegge / Gas Town">Steve Yegge / Gas Town</a></li>
+            <li>
+                <a href="#artificial-analysis" aria-label="Artificial Analysis">Artificial Analysis</a></li></ul>
+            </li>
+            <li>
+                <a href="#tools--specs" aria-label="Tools &amp; Specs">Tools &amp; Specs</a>
+            </li>
+        </ul>
+        </li>
+        </ul>
+    </div>
+</details>
+
+  <div class="post-content md-content"><blockquote>
+<p>A developer vibe-coding a side project a dozen people will ever run, and a team keeping a ten-year-old enterprise system alive for another quarter, share almost no constraints worth naming, and most of the advice in circulation is really one of those two people telling the other how to live.</p>
+<ul>
+<li><a href="#osmani-constraints">Addy Osmani</a></li>
+</ul>
+</blockquote>
+<p>The AI development space changes so quickly it&rsquo;s hard to tell what&rsquo;s real and what&rsquo;s hype. Further complicating things, an approach can be valid for a lot of other folks&rsquo; day to day, but not mine. It seems I regularly see a new project with 10K+ stars and say to myself, &ldquo;Why would I ever need that?&rdquo; The impetus for this post is my own desire to have some clarity on what seems to be working and when to apply it.</p>
+<p>This post surveys current thoughts and patterns in AI engineering as of August 2026. It uses a number of videos from the <a href="https://www.ai.engineer/worldsfair/2026">AI Engineer World&rsquo;s Fair</a> conference in San Francisco, a conference I&rsquo;ve found to be a good proxy for the current state of the conversation. It also includes a number of AI engineering blog posts from various companies, as well as posts from practitioners that I&rsquo;ve found high signal.</p>
+<p>My goal is to convey accurate information about the current landscape and to provide <a href="#references">references</a> of resources for others to learn from. I voice some personal opinions in order to spark discussion, but try to identify them as such. Let&rsquo;s dive in.</p>
+<h2 id="the-agentic-era">The Agentic Era<a hidden class="anchor" aria-hidden="true" href="#the-agentic-era">#</a></h2>
+<blockquote>
+<p>&ldquo;we haven&rsquo;t even coalesced on a definition of what an agent is, even though we&rsquo;re well into the agentic era.&rdquo;</p>
+<ul>
+<li><a href="#schroeder-agentic-era">Justin Schroeder, StandardAgents (2:12)</a></li>
+</ul>
+</blockquote>
+<p>Across everything I&rsquo;ve watched and read, I don&rsquo;t know that I&rsquo;ve seen even two people agree on the same definition of an Agent.</p>
+<p>A few years ago most definitions of an Agent were roughly: LLM + memory + tools + planning + action. However, more recent definitions move the deterministic layer (tools, memory, etc) under the term harness. The definition of an Agent then becomes a harness plus the LLM it drives. Popular harnesses today include Claude Code, Codex, OpenCode, etc.</p>
+<p>Splitting the harness from the LLM gives us a catch-all term to discuss that deterministic layer separate from the LLM. Folks using the same harness can author static configurations, allowing for version controlled experimentation or sharing.</p>
+<h3 id="at-scale">At Scale<a hidden class="anchor" aria-hidden="true" href="#at-scale">#</a></h3>
+<p>A major benefit of the Agent abstraction can be realized once you adopt the constraint of &ldquo;one task per Agent&rdquo;. Schroeder calls these <a href="#schroeder-agentic-era">domain specific Agents</a>. Domain specific Agents have been shown to have better overall performance on their task, as well as a reduced cost.</p>
+<p>In addition to improved cost and performance, this small change allows us to think of Agents as functions that can be tested, parallelized, looped, and scaled. Techniques that software engineers have spent decades utilizing and building infrastructure around.</p>
+<p>Topologies for Agent orchestration seem varied, often customized for the organization or task at hand. A few companies have seized on this trend, such as <a href="#vercel-ai-sdk">Vercel</a> or <a href="#anthropic-agent-sdk">Anthropic</a>, by creating Agent management SDKs, turning Agents into something you can install.</p>
+<p>Others opt for bespoke in-house solutions. <a href="#cloudflare-code-review">Cloudflare</a> fans PR reviews to a panel of specialist Agents with a coordinating Agent managing them. <a href="#doordash-cloud-agents">DoorDash</a> recently set up a cloud Agent platform, providing their developers with tools like sandboxes, an MCP gateway, and playbooks, letting teams run their own Agents.</p>
+<h2 id="context-is-everything">Context is Everything<a hidden class="anchor" aria-hidden="true" href="#context-is-everything">#</a></h2>
+<blockquote>
+<p>&ldquo;the LLM is a new kind of a computer&hellip; it&rsquo;s kind of like the CPU equivalent. The context windows are kind of like the memory, and then the LLM is orchestrating memory and compute for problem solving.&rdquo;</p>
+<ul>
+<li><a href="#karpathy-cpu-memory">Andrej Karpathy (10:15)</a></li>
+</ul>
+</blockquote>
+<p>An area of much discussion across all of these resources is the idea of curating the tokens you&rsquo;re sending to the LLM to be highly relevant to the task and as few as possible. This process used to be called prompting, but today broadly falls under the term context engineering or context management. The rationale for context engineering can be seen across a few different categories.</p>
+<h3 id="context-rot">Context Rot<a hidden class="anchor" aria-hidden="true" href="#context-rot">#</a></h3>
+<p>Context Rot is the first of our categories, which was first introduced in a technical report by Chroma <a href="#chroma-context-rot">Context Rot: How Increasing Input Tokens Impacts LLM Performance</a>. The basic idea behind Context Rot is that more tokens measurably &ldquo;distract&rdquo; the LLM, as its attention is spread thinner across the increased tokens.</p>
+<p>This means even though a model may support a context window of a million tokens, you likely don&rsquo;t want to be using even close to all of them.</p>
+<blockquote>
+<p>&ldquo;If you&rsquo;re just getting started with AI, try to keep it around 100,000 tokens. For [a] larger million[-token] context window, we probably revise this up to like 200,000 tokens - but I&rsquo;ve regularly tried to keep it under 60[k] for the hardest problems&hellip; One of the telltale signs that you&rsquo;re in the dumb zone is&hellip; you&rsquo;re 200,000 tokens in and the model&rsquo;s finished some work and it&rsquo;s trying to get the test to pass and it&rsquo;s like not [passing].&rdquo;</p>
+<ul>
+<li><a href="#horthy-dumb-zone">Dex Horthy, HumanLayer (28:36)</a></li>
+</ul>
+</blockquote>
+<p>This quote caught me off guard the first time I heard it, but the more I thought about it, the more it made sense. While long chat sessions can be good, we&rsquo;ve all had those conversations where it&rsquo;s going great and then suddenly the LLM is forgetting things or hallucinating. I&rsquo;ve actually added a warning to my Claude Code config that changes the context window to orange when I&rsquo;ve reached 100k tokens, as a reminder to reset.</p>
+<p>Another technique I&rsquo;ve found useful for keeping chat sessions focused is heavy utilization of Claude Code&rsquo;s <a href="#cc-subagents">subagents</a> and <a href="#cc-workflows">dynamic workflows</a>. I keep the main chat focused on the overall goal, i.e., &ldquo;plan feature X&rdquo;, and have it spawn agents for anything that might distract it from that task. This can include things like reading code, exploring data in Snowflake, checking latency in Datadog, or even web searches. The subagents come back with the information we need to make a decision, and the main chat stays on track.</p>
+<h3 id="cost">Cost<a hidden class="anchor" aria-hidden="true" href="#cost">#</a></h3>
+<p>The second category is the cost savings that come with using fewer tokens. Being deliberate about what gets sent to the model means less input cost as well as reduced back-and-forth cost (output).</p>
+<p>Perhaps surprisingly, <a href="#tesco-token-index">Rajkumar Sakthivel (Tesco)</a> found that for their coding tasks ~90% of the tokens are input (big codebase/context in, small diff out). Despite the fact that output tokens are priced 4-8x higher than input tokens, reducing input tokens worked out to roughly ~61% of their dollar bill.</p>
+<p><img alt="Where your tokens actually go" height="720" loading="lazy" src="/blog/posts/ai-engineering-patterns/images/tesco-tokens-input-vs-output.png" width="1280">
+<em>Where your tokens actually go (<a href="https://www.youtube.com/watch?v=dRmWYHuIJxM&amp;t=177s">Rajkumar Sakthivel, Tesco, 2:57</a>)</em></p>
+<h3 id="solutions-in-practice">Solutions In Practice<a hidden class="anchor" aria-hidden="true" href="#solutions-in-practice">#</a></h3>
+<h4 id="skills">Skills<a hidden class="anchor" aria-hidden="true" href="#skills">#</a></h4>
+<p>A popular solution to context management is skills. Skills have exploded onto the AI development scene and were the headline of several talks at the conference.</p>
+<p>Skills are a markdown file spec created by Anthropic, that gives the LLM instructions on how to complete a task. Skills are an improvement over normal markdown files due to their utilization of progressive disclosure. Skills have a yaml metadata &ldquo;frontmatter&rdquo; that harnesses read, rather than the entire skill body. This metadata is then used to selectively load the skill content at runtime when the Agent deems it relevant.</p>
+<blockquote>
+<p>&ldquo;If you do something ≥ once a week, make it a skill&hellip; Think of skills as workflows written in markdown.&rdquo;</p>
+<ul>
+<li><a href="#yan-skills">Eugene Yan</a></li>
+</ul>
+</blockquote>
+<p>Anecdotally, skills have been incredibly valuable to the ML search team as day-to-day workflows. This includes things such as PR reviewing, data exploration, working with Datadog, and even Optimizely experiment generation.</p>
+<p>However, skills aren&rsquo;t a silver bullet. <a href="#schmid-skills-evals">Philipp Schmid of Google DeepMind</a> found that while human-generated skills improved model performance on task, AI-generated skills performed worse on tasks than a model with no skills at all.</p>
+<p>Perhaps dating myself, I see skills as the AI generation&rsquo;s jQuery. Skills are an extremely useful abstraction for the problems we&rsquo;re having now. However, I suspect that in five or ten years we&rsquo;ll have different abstractions that can better model the nuances of working with Agents.</p>
+<h4 id="compression">Compression<a hidden class="anchor" aria-hidden="true" href="#compression">#</a></h4>
+<p>Another way to keep a lean context window is to utilize compression techniques to send the same information with fewer tokens. <a href="#headroom">Headroom</a> does this via a proxy server, inspecting your outbound payload for code and compressing it. In addition to compression, Tesco passes only function names and descriptions rather than the entire thing.</p>
+<blockquote>
+<p>&ldquo;Instead of sending whole files, the AI search[es] and index[es]. It gets back only [the] small piece of code it actually needs.&rdquo;</p>
+<ul>
+<li><a href="#tesco-code-index">Rajkumar Sakthivel, Tesco (3:25)</a></li>
+</ul>
+</blockquote>
+<p><a href="#toon">Toon</a> takes a different approach to compression, opting to replace JSON with a structured data format explicitly designed to use fewer tokens. Projects like <a href="#axi">AXI</a> take this a step further, creating a set of rules for building CLI tools and MCP servers in a way that measurably uses fewer tokens.</p>
+<h4 id="long-term-memory">Long Term Memory<a hidden class="anchor" aria-hidden="true" href="#long-term-memory">#</a></h4>
+<blockquote>
+<p>&ldquo;every company on this earth is about to need a brain - the memory layer that means you never have to re-ask what you knew.&rdquo;</p>
+<ul>
+<li><a href="#tan-company-brain">Garry Tan, Y Combinator (17:22)</a></li>
+</ul>
+</blockquote>
+<p>Since LLM sessions are stateless, important data must be persisted in some form. While sometimes a pain, this has the added benefit of allowing us to pick and choose only the most important information for the context window.</p>
+<p>I&rsquo;ve seen this show up in a few places as the &ldquo;Company Brain&rdquo;. Y Combinator believes all companies need to create a <a href="#tan-company-brain">company brain</a>. <a href="#cloudflare-standards">Cloudflare</a> built a company brain when they realized that institutional knowledge <a href="#cloudflare-knowledge-recovery">&ldquo;became harder to recover when people moved between teams.&rdquo;</a> <a href="#yan-working">Eugene Yan</a> puts it simply: &ldquo;Connect models to your organization&rsquo;s context&rdquo;.</p>
+<p>The simplest way to do this is via a folder on your disk, some sort of Markdown vault (Obsidian, Tolaria, etc.), or per-project markdown documentation. However, the markdown-as-memory approach comes with its own pitfalls. Cloudflare notes that markdown memory &ldquo;rots incredibly fast&rdquo; and requires constant updates as things change. Personally I&rsquo;ve had Claude recite &ldquo;facts&rdquo; to me on a number of occasions that can be traced to an outdated markdown file or code comment somewhere.</p>
+<p>Another markdown pitfall is that it&rsquo;s easy to load the whole document into context when only a small subset is required. Common ways to avoid this are to have the Agent use <code>grep</code>, <code>tail</code>, <code>head</code> or <code>jq</code> to parse relevant data from files. <a href="#ast-grep"><code>ast-grep</code></a> is useful for codebases, allowing Agents to seek out specific programming language patterns. Cloudflare takes a different approach for the Codex brain, parsing relevant statements out and loading only those into Codex.</p>
+<p>Non-markdown long term memory options are also gaining in popularity. These include projects such as <a href="https://github.com/letta-ai/letta">Letta</a>, <a href="https://github.com/mem0ai/mem0">Mem0</a>, or <a href="https://github.com/getzep/zep">Zep</a>. The materials I reviewed for this post don&rsquo;t really cover these. At a glance most seem to be abstractions on top of databases and vector embeddings that allow an Agent to access information semantically.</p>
+<h2 id="loops">Loops<a hidden class="anchor" aria-hidden="true" href="#loops">#</a></h2>
+<blockquote>
+<p>&ldquo;My job is to write loops.&rdquo;</p>
+<ul>
+<li><a href="#cherny-write-loops">Boris Cherny, creator of Claude Code (Anthropic)</a></li>
+</ul>
+</blockquote>
+<p>I&rsquo;m almost certain everyone reading this knows what a loop is. It&rsquo;s so ingrained into our day to day that we overlook that almost everything can be reduced to a loop. The AI development space has been rediscovering loops lately.</p>
+<p>I see AI Agent loops as largely falling under two categories: what I call the Agent loop and the Improvement loop.</p>
+<h3 id="agent-loop">Agent Loop<a hidden class="anchor" aria-hidden="true" href="#agent-loop">#</a></h3>
+<p>The Agent loop is about having a single Agent iterate until it has achieved a given task. This doesn&rsquo;t necessarily have to be writing code. <a href="#uber-closed-loop">Uber Eats</a> uses multi-modal Agent loops to augment product images.</p>
+<p><a href="#mistele-loop-engineering">Kyle Mistele of HumanLayer</a> maps the Agent loop onto classical systems design control loop:</p>
+<p><a id="agent-loop-diagram"></a>
+<img alt="Agentic control loops" height="772" loading="lazy" src="/blog/posts/ai-engineering-patterns/images/mistele-agentic-control-loops.png" width="1388">
+<em>Agentic control loops (<a href="https://www.youtube.com/watch?v=xIt_mTQp6mY&amp;t=276s">Kyle Mistele, HumanLayer</a>)</em></p>
+<p>We give the Agent loop our desired state, which is then compared to the current state, generating a list of changes. The controller, usually heuristics or perhaps the Agent itself, selects a change to make. The Agent executes the change and commits it as the &ldquo;new state&rdquo;. The changes are run through a set of sensors (validators) and any violations are surfaced to the controller. A new Agent, with a fresh context window, picks up the next task and the loop repeats until the desired state is reached.</p>
+<p>Giving an Agent loop a set of well-defined tasks and letting it run through them is an effective way to iterate towards a desired goal. As we saw in the previous section, a fresh context window helps keep the Agent task focused. However, if you don&rsquo;t give the Agent some form of deterministic guardrails, it can quickly spiral out of control.</p>
+<p><a href="#great-loops-debate">The Great Loops Debate</a> has panelists argue points from opposite ends of the autonomy curve. Geoff Huntley (creator of the Ralph loop) and Ian Livingstone (Keycard) argue for the YOLO version of the Agent loop (Ralph Wiggum, /goal) where the Agent decides when the loop is completed. Dex Horthy (HumanLayer) and Greg Pstrucha (Sentry) argue that a human needs to decide when the loop is complete, citing non-deterministic LLM behavior. It&rsquo;s worth noting that both sides agree that deterministic validation is important in agentic loops.</p>
+<blockquote>
+<p>&ldquo;I heavily exploit pre-commit hooks, folks&hellip; and I engineer in that back pressure by analyzing the work that is done.&rdquo;</p>
+<ul>
+<li><a href="#huntley-precommit">Geoff Huntley (30:47)</a></li>
+</ul>
+</blockquote>
+<p>Personally, I think both types of loops have their place. Goal loops can be incredibly valuable for vibe coding one-off scripts or standing up a greenfield project. However, if I have to maintain critical systems or ship code at scale, I think I want a human in the loop.</p>
+<h3 id="improvement-loop">Improvement Loop<a hidden class="anchor" aria-hidden="true" href="#improvement-loop">#</a></h3>
+<p>The Improvement loop operates at a meta-level, across multiple iterations of an Agent. The output of the Agent loop is assessed on task performance and future iterations of the Agent loop are modified with the goal of improved performance on the task.</p>
+<p>A real-world example of the Improvement loop is <a href="#uber-closed-loop">Uber Eats&rsquo; Agent tuner</a>:</p>
+<p><img alt="How Uber tunes an Agent" height="786" loading="lazy" src="/blog/posts/ai-engineering-patterns/images/uber-agent-tuner.png" width="1414">
+<em>How Uber tunes an Agent (<a href="https://www.youtube.com/watch?v=31GUkCBD-Uc&amp;t=787s">Soumya Gupta &amp; Jai Chopra, Uber</a>)</em></p>
+<p>Their Agent is fed a base prompt and human-labeled data. It performs a task, in this case choosing what images a user sees, and the output is scored against unseen samples. A different Agent suggests changes to the prompt for the initial Agent, and the loop starts over. This loop itself is part of a larger pipeline run on real-time user data, allowing Uber to ship improved Agent loops in near real-time.</p>
+<p><a href="#schafer-langfuse">Annabell Schäfer</a> shows how Langfuse used an Improvement loop to have a large model (Opus 4.8) improve a smaller model&rsquo;s (GPT-5.4 nano) performance on a classification task. The large model&rsquo;s prompt changes are seeded via human domain knowledge.</p>
+<p><a href="#weng-harness">Lilian Weng</a> has an excellent survey of current research into Agent harness Improvement loops. Some papers continue refinement via prompt and context adjustments. Others move to an even higher level, experimenting with loops that modify harness code or model weights.</p>
+<h2 id="taming-the-stochastic-core">Taming the Stochastic Core<a hidden class="anchor" aria-hidden="true" href="#taming-the-stochastic-core">#</a></h2>
+<blockquote>
+<p>&ldquo;People worry about hallucinations, but that&rsquo;s the feature&hellip; We hallucinate in a way. We imagine things that may not exist, and then we turn them into reality. And that&rsquo;s what large language models do.&rdquo;</p>
+<ul>
+<li><a href="#coyle-hallucination-feature">Frank Coyle, UC Berkeley (5:05)</a></li>
+</ul>
+</blockquote>
+<p>Code is deterministic. Given the same inputs you&rsquo;ll get the same outputs. This is something software developers rely on every day: Does this code compile? Do my tests pass? The LLM core of an Agent is non-deterministic, making it difficult to guarantee it will do what you expect. As we&rsquo;ll see, the AI development community utilizes both deterministic and non-deterministic methods together to keep Agents pointed in the right direction.</p>
+<p><img alt="Verification should be multilayered" height="814" loading="lazy" src="/blog/posts/ai-engineering-patterns/images/verifiers-multilayered.png" width="1458">
+<em>Verification should be multilayered (<a href="https://www.youtube.com/watch?v=VrpEyglYgeU&amp;t=726s">Tariq Shaukat, Sonar, 12:06</a>)</em></p>
+<h3 id="tests-linters-and-compilers">Tests, Linters, and Compilers<a hidden class="anchor" aria-hidden="true" href="#tests-linters-and-compilers">#</a></h3>
+<blockquote>
+<p>&ldquo;I think of verification as a ladder. The bottom is cheap and deterministic; the top is expensive and requires judgement.&rdquo;</p>
+<ul>
+<li><a href="#yan-verification-ladder">Eugene Yan</a></li>
+</ul>
+</blockquote>
+<p>Our existing deterministic verifiers allow us to perform a reliable &ldquo;this must pass&rdquo; check on LLM output. Since by definition deterministic checks are repeatable and reliable, any check that can be made deterministic in an Agent loop likely should be.</p>
+<p>As we saw in <a href="#agent-loop-diagram">the agent loop diagram above</a>, the same compilers, tests, and linters that we use day to day are part of the Agent loop definition. Geoff Huntley recommends utilizing git pre-commit hooks as a window to catch violations, and <code>echo</code> &ldquo;prompts&rdquo; back to the Agent, letting it know where the boundary is.</p>
+<h3 id="ontologies">Ontologies<a hidden class="anchor" aria-hidden="true" href="#ontologies">#</a></h3>
+<p>An ontology is a deterministic rules layer that sits on top of a fact-based data graph. These rules define valid data types and relationships, giving a deeper semantic meaning to the data. Take this example of a teacher-student relationship:</p>
+<blockquote>
+<p>&ldquo;So if I say teaches has a domain of teacher, that means if I say &lsquo;Bob teaches Scooter&rsquo; in my text, I can infer that Bob is a teacher. And if I say &lsquo;all teachers are persons,&rsquo; then this statement lets me know, if I say &lsquo;Bob teaches Scooter,&rsquo; now I know Bob is a person, Bob is a teacher. What about Scooter? If I say teaches has a range of student, that means the right side of the verb, then Scooter is a student. And now I have this extra information into my system.&rdquo;</p>
+<ul>
+<li><a href="#coyle-teaches-domain-range">Frank Coyle, UC Berkeley (10:09)</a></li>
+</ul>
+</blockquote>
+<p>An Agent can construct a structured statement that is then deterministically fact-checked by the ontology. Coyle discusses two ontology specifications which were designed for the early semantic web over 20 years ago. <a href="#rdfs">RDFS</a> defines a language for schema and vocabulary. <a href="#owl">OWL</a> builds on top of RDFS adding richer ontology axioms.</p>
+<p><a href="#eifrem-substrate">Emil Eifrem of Neo4j</a> posits that every business needs an ontology substrate with three pillars:</p>
+<p><img alt="Ontology-based semantic layer, three pillars" height="820" loading="lazy" src="/blog/posts/ai-engineering-patterns/images/neo4j-three-pillars.png" width="1460">
+<em>Ontology-based semantic layer, three pillars (<a href="https://www.youtube.com/watch?v=VGN22pPpb-8&amp;t=372s">Emil Eifrem, Neo4j, 6:12</a>)</em></p>
+<p>This ontology substrate prevents teams from needing to re-discover their information sources every time they build an Agent. It&rsquo;s the data version of keeping your code DRY.</p>
+<p>Both ontology talks outline two methods of building ontologies. The top-down approach is where domain experts define entities and their relationships. The bottom-up approach takes existing production execution traces and codifies them into ontologies.</p>
+<h3 id="evals">Evals<a hidden class="anchor" aria-hidden="true" href="#evals">#</a></h3>
+<blockquote>
+<p>&ldquo;Code is provable, but when you start dealing with large code bases, software is not. It&rsquo;s still very complex. It is still very messy.&rdquo;</p>
+<ul>
+<li><a href="#shaukat-code-provable">Tariq Shaukat, Sonar (7:45)</a></li>
+</ul>
+</blockquote>
+<p>Evals are a set of tests you run on Agent outputs to measure how well a given Agent configuration is doing on a task over time. They play a critical part in the Improvement loop. Low initial evals are not necessarily bad. Rather, they highlight areas for improvement. With proper tuning an Agent can improve its eval pass rate over time.</p>
+<p>Uber considers human labels the source of truth for use in their evals. They give human labelers an objective guideline for labeling data that is usually in a simple form (yes, no, unsure).</p>
+<p>When building evals it&rsquo;s important to use real-world data. This can include obvious examples like user signals, but can also include less obvious sources such as logs or system traces. Uber logs as much data as they can, allowing them to map production data to user segments where the Agent can improve.</p>
+<p>A pitfall to watch out for with evals comes in the form of reward hacking, where the Agent learns how to game the metric rather than complete the task. This can even include scenarios such as Agents looking up prior runs to cheat (<a href="#schmid-skills-evals">Schmid, 18:48</a>). Lilian Weng&rsquo;s <a href="#weng-harness">article</a> advises combatting reward hacking with a gating secondary &ldquo;held-out&rdquo; eval set that the Agent cannot see. Uber does something similar with a secondary recall guardrail metric, preventing the Agent from regressing in other areas to pass a specific eval.</p>
+<h3 id="models-watching-models">Models Watching Models<a hidden class="anchor" aria-hidden="true" href="#models-watching-models">#</a></h3>
+<p>One of the more popular forms of non-deterministic validation is using one LLM to grade the output of a different LLM against a given criterion. This process is often referred to as LLM as a Judge. Teams often reach for this form of verification when a grading task is complex or doesn&rsquo;t necessarily have a verifiable correct answer.</p>
+<p>LLM as a Judge shouldn&rsquo;t be used lightly, however. Its non-deterministic nature means that a judge could pass an input one run and fail it the next. Cloudflare builds resilience into their judge architecture by having a panel of specialized judge Agents that feed verdicts to a coordinating Agent responsible for the final judgment. Judge model architectures also have the hidden overhead of needing an Improvement loop, evals, and data to ensure alignment to the task.</p>
+<h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
+<h2 id="talks">Talks<a hidden class="anchor" aria-hidden="true" href="#talks">#</a></h2>
+<h3 id="the-future-is-domain-specific-agents">The Future Is Domain-Specific Agents<a hidden class="anchor" aria-hidden="true" href="#the-future-is-domain-specific-agents">#</a></h3>
+<p>Justin Schroeder, StandardAgents · AI Engineer World&rsquo;s Fair 2026 · <a href="https://www.youtube.com/watch?v=spNAUEgq_A8">https://www.youtube.com/watch?v=spNAUEgq_A8</a></p>
+<ul>
+<li><a id="schroeder-agentic-era"></a><a href="https://www.youtube.com/watch?v=spNAUEgq_A8&amp;t=132s">We&rsquo;re well into the &ldquo;agentic era&rdquo; without even agreeing on what an agent is</a> (2:12)</li>
+</ul>
+<h3 id="the-great-loops-debate-panel">The Great Loops Debate (panel)<a hidden class="anchor" aria-hidden="true" href="#the-great-loops-debate-panel">#</a></h3>
+<p><a id="great-loops-debate"></a>Dex Horthy (HumanLayer), Geoff Huntley, Ian Livingstone (KeyCard), Greg Pstrucha (Sentry) · moderated by Allie Howe (Insecure Agents) · AI Engineer World&rsquo;s Fair 2026 · <a href="https://youtu.be/c35YoMdnI78">https://youtu.be/c35YoMdnI78</a></p>
+<ul>
+<li><a id="horthy-dumb-zone"></a><a href="https://youtu.be/c35YoMdnI78?t=1716s">Keep context small: the token budgets that keep you out of the &ldquo;dumb zone&rdquo;</a> (~28:36)</li>
+<li><a id="huntley-precommit"></a><a href="https://youtu.be/c35YoMdnI78?t=1847s">Engineering back-pressure into the loop with pre-commit hooks that echo the boundary back to the agent</a> (30:47)</li>
+</ul>
+<h3 id="we-cut-94-of-ai-coding-tokens-with-a-local-code-index">We Cut 94% of AI Coding Tokens With a Local Code Index<a hidden class="anchor" aria-hidden="true" href="#we-cut-94-of-ai-coding-tokens-with-a-local-code-index">#</a></h3>
+<p>Rajkumar Sakthivel, Tesco · AI Engineer World&rsquo;s Fair 2026 · <a href="https://www.youtube.com/watch?v=dRmWYHuIJxM">https://www.youtube.com/watch?v=dRmWYHuIJxM</a></p>
+<ul>
+<li><a id="tesco-token-index"></a><a href="https://www.youtube.com/watch?v=dRmWYHuIJxM&amp;t=169s">Where coding-agent tokens actually go (~90% input), and how a local code index slashed them</a> (2:49)</li>
+<li><a id="tesco-code-index"></a><a href="https://www.youtube.com/watch?v=dRmWYHuIJxM&amp;t=205s">On the local code index: searching and indexing so the Agent gets back only the slice of code it needs, not whole files</a> (3:25)</li>
+</ul>
+<h3 id="dont-ship-skills-without-evals">Don&rsquo;t Ship Skills Without Evals<a hidden class="anchor" aria-hidden="true" href="#dont-ship-skills-without-evals">#</a></h3>
+<p>Philipp Schmid, Google DeepMind · AI Engineer World&rsquo;s Fair 2026 · <a href="https://www.youtube.com/watch?v=0vphxNt4wyk">https://www.youtube.com/watch?v=0vphxNt4wyk</a></p>
+<ul>
+<li><a id="schmid-skills-evals"></a><a href="https://www.youtube.com/watch?v=0vphxNt4wyk&amp;t=1128s">Why you shouldn&rsquo;t ship skills without evals, including agents that learn to game the metric</a> (18:48)</li>
+</ul>
+<h3 id="every-company-should-have-a-brain">Every company should have a Brain<a hidden class="anchor" aria-hidden="true" href="#every-company-should-have-a-brain">#</a></h3>
+<p>Garry Tan, Y Combinator · AI Engineer World&rsquo;s Fair 2026 · <a href="https://www.youtube.com/watch?v=eBUyTS7SzV4">https://www.youtube.com/watch?v=eBUyTS7SzV4</a></p>
+<ul>
+<li><a id="tan-company-brain"></a><a href="https://www.youtube.com/watch?v=eBUyTS7SzV4&amp;t=1042s">Why every company will need a &ldquo;brain&rdquo;: a persistent memory layer so you never re-ask what you already knew</a> (17:22)</li>
+</ul>
+<h3 id="building-closed-loop-evals-for-a-multimodal-agent-at-scale">Building Closed-Loop Evals for a Multimodal Agent at Scale<a hidden class="anchor" aria-hidden="true" href="#building-closed-loop-evals-for-a-multimodal-agent-at-scale">#</a></h3>
+<p>Soumya Gupta &amp; Jai Chopra, Uber · AI Engineer World&rsquo;s Fair 2026 · <a href="https://www.youtube.com/watch?v=31GUkCBD-Uc">https://www.youtube.com/watch?v=31GUkCBD-Uc</a></p>
+<ul>
+<li><a id="uber-closed-loop"></a><a href="https://www.youtube.com/watch?v=31GUkCBD-Uc&amp;t=787s">A closed-loop eval system that diagnoses failing agents and auto-tunes them from production feedback</a> (13:07)</li>
+</ul>
+<h3 id="loop-engineering-from-first-principles">Loop Engineering from First Principles<a hidden class="anchor" aria-hidden="true" href="#loop-engineering-from-first-principles">#</a></h3>
+<p>Kyle Mistele, HumanLayer · AI Engineer World&rsquo;s Fair 2026 · <a href="https://www.youtube.com/watch?v=xIt_mTQp6mY">https://www.youtube.com/watch?v=xIt_mTQp6mY</a></p>
+<ul>
+<li><a id="mistele-loop-engineering"></a><a href="https://www.youtube.com/watch?v=xIt_mTQp6mY&amp;t=276s">The agent loop drawn as a classical control loop: desired state, controller, actuator, sensor, and violations fed back</a> (4:36)</li>
+</ul>
+<h3 id="stop-burning-tokens-why-self-improvement-needs-domain-expertise-first">Stop Burning Tokens: Why self-improvement needs domain expertise first<a hidden class="anchor" aria-hidden="true" href="#stop-burning-tokens-why-self-improvement-needs-domain-expertise-first">#</a></h3>
+<p>Annabell Schäfer, Langfuse · AI Engineer World&rsquo;s Fair 2026 · <a href="https://www.youtube.com/watch?v=eAXxdtNlK04">https://www.youtube.com/watch?v=eAXxdtNlK04</a></p>
+<ul>
+<li><a id="schafer-langfuse"></a><a href="https://www.youtube.com/watch?v=eAXxdtNlK04&amp;t=308s">Using a large model to improve a small model&rsquo;s classifier, seeded with human domain knowledge</a> (5:08)</li>
+</ul>
+<h3 id="why-agentic-systems-need-ontologies">Why Agentic Systems Need Ontologies<a hidden class="anchor" aria-hidden="true" href="#why-agentic-systems-need-ontologies">#</a></h3>
+<p>Frank Coyle, UC Berkeley · AI Engineer World&rsquo;s Fair 2026 · <a href="https://www.youtube.com/watch?v=Sir59K8ZDPU">https://www.youtube.com/watch?v=Sir59K8ZDPU</a></p>
+<ul>
+<li><a id="coyle-hallucination-feature"></a><a href="https://www.youtube.com/watch?v=Sir59K8ZDPU&amp;t=305s">Reframing hallucination as the feature: imagining things that don&rsquo;t exist yet, then turning them into reality</a> (5:05)</li>
+<li><a id="coyle-teaches-domain-range"></a><a href="https://www.youtube.com/watch?v=Sir59K8ZDPU&amp;t=609s">How an ontology&rsquo;s domain and range rules let you infer new facts (the Bob/Scooter teacher-student example)</a> (10:09)</li>
+</ul>
+<h3 id="thinner-agents-on-a-smarter-substrate-the-ontology-based-semantic-layer">Thinner Agents on a Smarter Substrate: The Ontology-based Semantic Layer<a hidden class="anchor" aria-hidden="true" href="#thinner-agents-on-a-smarter-substrate-the-ontology-based-semantic-layer">#</a></h3>
+<p>Emil Eifrem, Neo4j · AI Engineer World&rsquo;s Fair 2026 · <a href="https://www.youtube.com/watch?v=VGN22pPpb-8">https://www.youtube.com/watch?v=VGN22pPpb-8</a></p>
+<ul>
+<li><a id="eifrem-substrate"></a><a href="https://www.youtube.com/watch?v=VGN22pPpb-8&amp;t=483s">Why every business needs a shared ontology substrate (three pillars) so agents stop rediscovering the same data sources</a> (8:03)</li>
+<li><a id="eifrem-three-pillars"></a><a href="https://www.youtube.com/watch?v=VGN22pPpb-8&amp;t=372s">The full three-pillars semantic-layer slide: a business-facing ontology, a technical ontology, and execution traces</a> (6:12)</li>
+</ul>
+<h3 id="in-the-land-of-ai-agents-the-verifiers-are-king">In the Land of AI Agents, the Verifiers Are King<a hidden class="anchor" aria-hidden="true" href="#in-the-land-of-ai-agents-the-verifiers-are-king">#</a></h3>
+<p>Tariq Shaukat, Sonar · AI Engineer World&rsquo;s Fair 2026 · <a href="https://www.youtube.com/watch?v=VrpEyglYgeU">https://www.youtube.com/watch?v=VrpEyglYgeU</a></p>
+<ul>
+<li><a id="shaukat-code-provable"></a><a href="https://www.youtube.com/watch?v=VrpEyglYgeU&amp;t=465s">Why code is provable but large software systems are not, and what that means for verifying agents</a> (7:45)</li>
+</ul>
+<h3 id="harness-engineering-is-not-enough-why-software-factories-fail">Harness Engineering is not Enough: Why Software Factories Fail<a hidden class="anchor" aria-hidden="true" href="#harness-engineering-is-not-enough-why-software-factories-fail">#</a></h3>
+<p>Dex Horthy, HumanLayer · AI Engineer World&rsquo;s Fair 2026 · <a href="https://www.youtube.com/watch?v=Ib5GBkD555M">https://www.youtube.com/watch?v=Ib5GBkD555M</a></p>
+<ul>
+<li><a id="horthy-bottleneck"></a><a href="https://www.youtube.com/watch?v=Ib5GBkD555M&amp;t=376s">On why the human review-and-test step is still the bottleneck even as the build step gets faster</a> (6:16)</li>
+</ul>
+<h3 id="i-run-a-fleet-of-ai-agents-across-three-machines-heres-what-broke">I Run a Fleet of AI Agents Across Three Machines. Here&rsquo;s What Broke.<a hidden class="anchor" aria-hidden="true" href="#i-run-a-fleet-of-ai-agents-across-three-machines-heres-what-broke">#</a></h3>
+<p>Kyle Jaejun Lee, KRAFTON · AI Engineer World&rsquo;s Fair 2026 · <a href="https://www.youtube.com/watch?v=4kYl2_mqmnQ">https://www.youtube.com/watch?v=4kYl2_mqmnQ</a></p>
+<ul>
+<li><a id="lee-agent-fleet"></a><a href="https://www.youtube.com/watch?v=4kYl2_mqmnQ&amp;t=82s">Hard-won lessons running a fleet of agents across three machines, and what broke</a> (1:22)</li>
+</ul>
+<h3 id="the-unreasonable-effectiveness-of-separating-the-task-from-the-model">The Unreasonable Effectiveness of Separating the Task from the Model<a hidden class="anchor" aria-hidden="true" href="#the-unreasonable-effectiveness-of-separating-the-task-from-the-model">#</a></h3>
+<p>Maxime Rivest &amp; Isaac Miller · AI Engineer World&rsquo;s Fair 2026 · <a href="https://www.youtube.com/watch?v=GgLQ02aO-hs">https://www.youtube.com/watch?v=GgLQ02aO-hs</a></p>
+<h3 id="full-workshop-setting-yourself-up-for-success">Full Workshop: Setting Yourself Up for Success<a hidden class="anchor" aria-hidden="true" href="#full-workshop-setting-yourself-up-for-success">#</a></h3>
+<p>Jason Liu, OpenAI Codex · AI Engineer World&rsquo;s Fair 2026 · <a href="https://www.youtube.com/watch?v=il1c1a2FufU">https://www.youtube.com/watch?v=il1c1a2FufU</a></p>
+<h3 id="active-graph-agent-runtime-babyagi-4">Active Graph Agent Runtime (BabyAGI 4)<a hidden class="anchor" aria-hidden="true" href="#active-graph-agent-runtime-babyagi-4">#</a></h3>
+<p>Yohei Nakajima, Untapped Capital · AI Engineer World&rsquo;s Fair 2026 · <a href="https://www.youtube.com/watch?v=khVX_BUnEwU">https://www.youtube.com/watch?v=khVX_BUnEwU</a></p>
+<h2 id="written">Written<a hidden class="anchor" aria-hidden="true" href="#written">#</a></h2>
+<h3 id="addy-osmani">Addy Osmani<a hidden class="anchor" aria-hidden="true" href="#addy-osmani">#</a></h3>
+<ul>
+<li><a id="osmani-constraints"></a><strong>Vibe-coding &ldquo;no shared constraints&rdquo; quote</strong> (Addy Osmani, @addyosmani, 2026-06-15) · tweet: <a href="https://x.com/addyosmani/status/2066595308629594363">https://x.com/addyosmani/status/2066595308629594363</a></li>
+</ul>
+<h3 id="cloudflare">Cloudflare<a hidden class="anchor" aria-hidden="true" href="#cloudflare">#</a></h3>
+<p>Shared by Nate Strandberg in <a href="https://weedmaps.slack.com/archives/CB4V0PTT2">#guild-ai</a> on 2026-08-06 (<a href="https://weedmaps.enterprise.slack.com/archives/CB4V0PTT2/p1786045523233959?thread_ts=1786045523.233959&amp;cid=CB4V0PTT2">thread</a>).</p>
+<ul>
+<li><a id="cloudflare-standards"></a><strong>How Cloudflare enforces engineering standards using AI</strong> - Timo Reimann · <a href="https://blog.cloudflare.com/engineering-standards-enforcement/">https://blog.cloudflare.com/engineering-standards-enforcement/</a>
+<ul>
+<li><a id="cloudflare-knowledge-recovery"></a><a href="https://blog.cloudflare.com/engineering-standards-enforcement/">&ldquo;Institutional knowledge became harder to recover when people moved between teams, and guidance that was not consistently surfaced or enforced led to drift between projects.&rdquo;</a></li>
+<li>Takeaways
+<ul>
+<li>Graph ontology based on specs</li>
+<li>Rule based brain
+<ul>
+<li>coding pillar</li>
+</ul>
+</li>
+<li>Non deterministic from what I can tell</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a id="cloudflare-code-review"></a><strong>Orchestrating AI Code Review at scale</strong> - Ryan Skidmore · <a href="https://blog.cloudflare.com/ai-code-review/">https://blog.cloudflare.com/ai-code-review/</a></li>
+</ul>
+<h3 id="doordash-engineering">DoorDash Engineering<a hidden class="anchor" aria-hidden="true" href="#doordash-engineering">#</a></h3>
+<ul>
+<li><a id="doordash-cloud-agents"></a><strong>Delegating Engineering Work to Cloud-Based Agents</strong> (Flux, DoorDash Engineering / @AIatDoorDash, 2026-08-11) · <a href="https://x.com/AIatDoorDash/status/2087284229751394705">https://x.com/AIatDoorDash/status/2087284229751394705</a>
+<ul>
+<li>In-house cloud agent platform: Firecracker microVM sandboxes, an MCP &ldquo;Agent Gateway&rdquo; with scoped per-playbook permissions, reusable YAML &ldquo;playbooks&rdquo; (mixing agentic and deterministic steps), and multi-surface invocation (Slack, GitHub, cron, CLI). DoorDash-reported scale: 130k automated engineering tasks/month, 25k+ code reviews/week. Thesis: writing code is mostly solved; the value is the harness/infrastructure around the agent. Started narrow with code review to earn trust.</li>
+</ul>
+</li>
+</ul>
+<h3 id="andrej-karpathy">Andrej Karpathy<a hidden class="anchor" aria-hidden="true" href="#andrej-karpathy">#</a></h3>
+<ul>
+<li><strong>Software Is Changing (Again)</strong> (YC AI Startup School, 2025-06-17) · <a href="https://www.youtube.com/watch?v=LCEmiRjPEtQ">https://www.youtube.com/watch?v=LCEmiRjPEtQ</a>
+<ul>
+<li><a id="karpathy-cpu-memory"></a><a href="https://www.youtube.com/watch?v=LCEmiRjPEtQ&amp;t=615s">&ldquo;the LLM is a new kind of a computer&hellip; it&rsquo;s kind of like the CPU equivalent. The context windows are kind of like the memory, and then the LLM is orchestrating memory and compute for problem solving.&rdquo;</a></li>
+<li>Iron Man suit / human-in-the-loop analogy starts at <strong>27:50</strong> → <a href="https://www.youtube.com/watch?v=LCEmiRjPEtQ&amp;t=1670s">https://www.youtube.com/watch?v=LCEmiRjPEtQ&amp;t=1670s</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="chroma">Chroma<a hidden class="anchor" aria-hidden="true" href="#chroma">#</a></h3>
+<ul>
+<li><a id="chroma-context-rot"></a><strong>Context Rot: How Increasing Input Tokens Impacts LLM Performance</strong> - Kelly Hong, Anton Troynikov, Jeff Huber (Chroma Technical Report, 2025-07-14) · <a href="https://research.trychroma.com/context-rot">https://research.trychroma.com/context-rot</a></li>
+</ul>
+<h3 id="eugene-yan">Eugene Yan<a hidden class="anchor" aria-hidden="true" href="#eugene-yan">#</a></h3>
+<ul>
+<li><a id="yan-working"></a><strong>How to Work and Compound with AI</strong> (2026-05) · <a href="https://eugeneyan.com/writing/working-with-ai/">https://eugeneyan.com/writing/working-with-ai/</a>
+<ul>
+<li><a id="yan-skills"></a><a href="https://eugeneyan.com/writing/working-with-ai/">&ldquo;If you do something ≥ once a week, make it a skill… Think of skills as workflows written in markdown.&rdquo;</a></li>
+<li><a id="yan-verification-ladder"></a><a href="https://eugeneyan.com/writing/working-with-ai/">&ldquo;I think of verification as a ladder. The bottom is cheap and deterministic; the top is expensive and requires judgement.&rdquo;</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="boris-cherny">Boris Cherny<a hidden class="anchor" aria-hidden="true" href="#boris-cherny">#</a></h3>
+<ul>
+<li><strong>&ldquo;My job is to write loops&rdquo;</strong> (Claude Code &amp; the Future of Engineering, Acquired Unplugged / WorkOS, ~June 2026) · clip: <a href="https://x.com/Av1dlive/status/2064321381953675599">https://x.com/Av1dlive/status/2064321381953675599</a>
+<ul>
+<li><a id="cherny-write-loops"></a><a href="https://x.com/Av1dlive/status/2064321381953675599">&ldquo;My job is to write loops.&rdquo;</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="lilian-weng">Lilian Weng<a hidden class="anchor" aria-hidden="true" href="#lilian-weng">#</a></h3>
+<ul>
+<li><a id="weng-harness"></a><strong>Harness Engineering for Self-Improvement</strong> (Lil&rsquo;Log, 2026-07-04) · <a href="https://lilianweng.github.io/posts/2026-07-04-harness/">https://lilianweng.github.io/posts/2026-07-04-harness/</a></li>
+</ul>
+<h3 id="kun-chen">Kun Chen<a hidden class="anchor" aria-hidden="true" href="#kun-chen">#</a></h3>
+<ul>
+<li><strong>firstmate</strong> · <a href="https://github.com/kunchenguid/firstmate">https://github.com/kunchenguid/firstmate</a></li>
+<li><strong>no-mistakes</strong> · <a href="https://github.com/kunchenguid/no-mistakes">https://github.com/kunchenguid/no-mistakes</a></li>
+<li><strong>YouTube</strong> · <a href="https://www.youtube.com/@kunchenguid">https://www.youtube.com/@kunchenguid</a></li>
+<li><strong>L8 Principal&rsquo;s Agentic Engineering Workflow</strong> (walkthrough) · <a href="https://www.youtube.com/watch?v=iQyg-KypKAA">https://www.youtube.com/watch?v=iQyg-KypKAA</a></li>
+</ul>
+<h3 id="steve-yegge--gas-town">Steve Yegge / Gas Town<a hidden class="anchor" aria-hidden="true" href="#steve-yegge--gas-town">#</a></h3>
+<ul>
+<li><strong>Welcome to Gas Town</strong> (blog) · <a href="https://steve-yegge.medium.com/welcome-to-gas-town-4f25ee16dd04">https://steve-yegge.medium.com/welcome-to-gas-town-4f25ee16dd04</a></li>
+<li><strong>Gas City</strong> (repo, gastownhall/gascity) · <a href="https://github.com/gastownhall/gascity">https://github.com/gastownhall/gascity</a></li>
+</ul>
+<h3 id="artificial-analysis">Artificial Analysis<a hidden class="anchor" aria-hidden="true" href="#artificial-analysis">#</a></h3>
+<ul>
+<li><strong>Artificial Analysis</strong> - independent, continuously-updated LLM model &amp; provider benchmarks (Intelligence Index, price per token, speed/throughput, context window, open weights) · <a href="https://artificialanalysis.ai">https://artificialanalysis.ai</a></li>
+</ul>
+<h2 id="tools--specs">Tools &amp; Specs<a hidden class="anchor" aria-hidden="true" href="#tools--specs">#</a></h2>
+<ul>
+<li><a id="vercel-ai-sdk"></a><strong>AI SDK</strong> (Vercel) - TypeScript toolkit for building AI apps and agents across model providers · <a href="https://ai-sdk.dev/docs/introduction">https://ai-sdk.dev/docs/introduction</a></li>
+<li><a id="anthropic-agent-sdk"></a><strong>Anthropic Claude Agent SDK</strong> - Anthropic&rsquo;s SDK for building agents on the Claude Code harness (built-in tools, agent loop, context management, MCP, subagents) · <a href="https://code.claude.com/docs/en/agent-sdk">https://code.claude.com/docs/en/agent-sdk</a></li>
+<li><a id="cc-subagents"></a><strong>Claude Code subagents</strong> · <a href="https://code.claude.com/docs/en/sub-agents">https://code.claude.com/docs/en/sub-agents</a></li>
+<li><a id="cc-workflows"></a><strong>Claude Code dynamic workflows</strong> · <a href="https://code.claude.com/docs/en/workflows">https://code.claude.com/docs/en/workflows</a></li>
+<li><a id="headroom"></a><strong>headroom</strong> · <a href="https://github.com/headroomlabs-ai/headroom">https://github.com/headroomlabs-ai/headroom</a> · via <a href="https://weedmaps.enterprise.slack.com/archives/CB4V0PTT2/p1785792408333809?thread_ts=1785792408.333809&amp;cid=CB4V0PTT2">Randy Brown</a></li>
+<li><a id="toon"></a><strong>Token-Oriented Object Notation</strong> · <a href="https://toonformat.dev/">https://toonformat.dev/</a></li>
+<li><a id="axi"></a><strong>axi</strong> · <a href="https://axi.md/">https://axi.md/</a> · repo: <a href="https://github.com/kunchenguid/axi">https://github.com/kunchenguid/axi</a></li>
+<li><a id="ast-grep"></a><strong>ast-grep</strong> · <a href="https://ast-grep.github.io/">https://ast-grep.github.io/</a></li>
+<li><a id="rdfs"></a><strong>RDF Schema (RDFS)</strong> · <a href="https://www.w3.org/TR/rdf-schema/">https://www.w3.org/TR/rdf-schema/</a></li>
+<li><a id="owl"></a><strong>Web Ontology Language (OWL 2)</strong> · <a href="https://www.w3.org/TR/owl2-overview/">https://www.w3.org/TR/owl2-overview/</a></li>
+</ul>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://jwsonic.github.io/blog/tags/blog/">Blog</a></li>
+      <li><a href="https://jwsonic.github.io/blog/tags/ai-engineering/">Ai-Engineering</a></li>
+    </ul>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>© John Palgut — content licensed <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></span> · 
+
+    
+    
+    <span>
+        Powered by
+        <a href="https://gohugo.io/?utm_source=papermod" rel="noopener" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" id="top-link" class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up">
+        <polyline points="17 11 12 6 7 11"></polyline>
+        <polyline points="17 18 12 13 7 18"></polyline>
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var toplink = document.getElementById("top-link");
+    window.onscroll = function () {
+        const scrollThreshold = window.innerHeight;
+        if (document.body.scrollTop > scrollThreshold || document.documentElement.scrollTop > scrollThreshold) {
+            toplink.classList.remove("hidden");
+        } else {
+            toplink.classList.add("hidden");
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>
