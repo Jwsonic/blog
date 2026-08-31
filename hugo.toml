@@ -2,6 +2,7 @@ baseURL = 'https://jwsonic.github.io/blog/'
 locale = 'en-us'
 title = "John Palgut's Blog"
 theme = 'PaperMod'
+copyright = "© John Palgut — content licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)"
 
 enableRobotsTXT = true
 buildDrafts = false
